@@ -1,5 +1,6 @@
 <script>
   import { findLocations } from '../services/locations'
+  import { debounce } from '../helper/common'
 
   export let handleClick
 
@@ -10,11 +11,14 @@
   const handleInput = e => {
     searchText = e.target.value
   }
+  
+  const findLocationsDebounce = debounce(async () => {
+    locationResponse = await findLocations(searchText)
+    show = true
+  }, 500)
 
   $: if(searchText.length > 2) {
-    console.log(searchText)
-    locationResponse = findLocations(searchText)
-    show = true
+    findLocationsDebounce()
   } else {
     locationResponse = []
     show = false
