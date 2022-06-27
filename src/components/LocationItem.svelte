@@ -1,14 +1,24 @@
 <script>
-  import { onMount } from 'svelte';
+  import { afterUpdate, onMount } from 'svelte';
   import { getWeatherByLocation } from '../services/weather'
 
   export let query
 
   let locationResponse = []
 
-  onMount(() => {
+ 
+  const getWeather = () => {
     locationResponse = getWeatherByLocation(query)
+  }
+
+  onMount(() => {
+    getWeather()
   })
+
+  afterUpdate(() => {
+    getWeather()
+  })
+
 
 </script>
 
@@ -32,7 +42,7 @@
     display: flex;
     justify-content: space-between;
     margin: 10px;
-    width: 100%;
+    width: 90%;
     max-width: 350px;
     background-color: rgb(42, 128, 226);
     border-radius: 10px;

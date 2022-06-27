@@ -13,7 +13,5 @@ export async function get(event) {
   const response = await fetch(`https://weatherapi-com.p.rapidapi.com/search.json?q=${query}`, options)
   const data = await response.json()
 
-  console.log(data)
-
   return {status: 200, body: data}
 }

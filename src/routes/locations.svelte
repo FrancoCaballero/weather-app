@@ -6,13 +6,17 @@
   let locations = []
 
   onMount(() => {
-    locations = JSON.parse(localStorage.getItem('locations')) || []
-    console.log(locations)
+    getItems()
   })
 
-  const handleClick = async ({lat, lon}) => {
+  const getItems = () => {
+    locations = JSON.parse(localStorage.getItem('locations')) || []
+  }
+
+  const handleClick = ({lat, lon}) => {
       const query = `${lat},${lon}`
       localStorage.setItem('locations', JSON.stringify([query, ...locations]))
+      locations = [query, ...locations]
   }
 </script>
 
@@ -24,9 +28,11 @@
   <InputSearch handleClick={handleClick} placeholder="Find locations"/>
   
   <div>
-    {#each locations as location}
-      <LocationItem query={location}/>
-    {/each}
+    {#if locations.length > 0}
+      {#each locations as location}
+        <LocationItem query={location}/>
+      {/each}
+    {/if}
   </div>
 </section>
 
@@ -60,7 +66,7 @@
     overflow-x: hidden;
     overflow-y: scroll;
     height: 100%;
-    max-height: 640px;
+    max-height: 500px;
   }
 
   a {
