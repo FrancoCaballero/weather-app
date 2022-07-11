@@ -40,6 +40,7 @@
     <li on:click={() => {
         handleClick(location)
         show = false
+        searchText = ''
       }}
     >
       {location.country}, {location.name}

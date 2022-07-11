@@ -1,28 +1,8 @@
 <script>
-  import { afterUpdate, onMount } from 'svelte';
-  import { getWeatherByLocation } from '../services/weather'
-
-  export let query
-
-  let locationResponse = []
-
- 
-  const getWeather = () => {
-    locationResponse = getWeatherByLocation(query)
-  }
-
-  onMount(() => {
-    getWeather()
-  })
-
-  afterUpdate(() => {
-    getWeather()
-  })
-
-
+  export let location
 </script>
 
-{#await locationResponse then location}
+{#if location}
   <section>
     <div>
       <h1>{location.country}</h1>
@@ -33,7 +13,7 @@
       <h3>{location.conditionText}</h3>
     </aside>
   </section>
-{/await}
+{/if}
 
 
 <style>

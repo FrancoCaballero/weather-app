@@ -2,21 +2,32 @@
   import { onMount } from 'svelte'
   import InputSearch from "../components/InputSearch.svelte"
   import LocationItem from "../components/LocationItem.svelte"
+  import { getWeatherByLocation } from '../services/weather';
 
   let locations = []
+  let querys = []
 
   onMount(() => {
     getItems()
   })
 
+  const getWeather = async (query) => {
+    const location = await getWeatherByLocation(query)
+    locations = [location, ...locations].sort((a, b) => a.country.localeCompare(b.country))
+  }
+
   const getItems = () => {
-    locations = JSON.parse(localStorage.getItem('locations')) || []
+    querys = JSON.parse(localStorage.getItem('querys')) || []
+    querys.forEach(q => {
+      getWeather(q)
+    });
   }
 
   const handleClick = ({lat, lon}) => {
       const query = `${lat},${lon}`
-      localStorage.setItem('locations', JSON.stringify([query, ...locations]))
-      locations = [query, ...locations]
+      querys = [query, ...querys]
+      localStorage.setItem('querys', JSON.stringify(querys))
+      getWeather(query)
   }
 </script>
 
@@ -30,7 +41,7 @@
   <div>
     {#if locations.length > 0}
       {#each locations as location}
-        <LocationItem query={location}/>
+        <LocationItem location={location}/>
       {/each}
     {/if}
   </div>
